@@ -1,0 +1,66 @@
+<mat-toolbar>
+  <mat-icon>favorite</mat-icon>
+
+  <span>perplexity Demo</span>
+
+</mat-toolbar>
+@for (item of itemList; track item) {
+  <mat-card class="m-2">
+    <mat-card-header>
+      <mat-card-title>{{ item.prompt }}</mat-card-title>
+      <mat-card-subtitle>{{ item.model }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if (item.waiting) {
+        <p>
+          Waiting for responses...
+        </p>
+      } @else {
+        <p>
+          {{ item.content.choices[0].message.content }}
+        </p>
+      }
+    </mat-card-content>
+  </mat-card>
+}
+<mat-card appearance="outlined" class="m-2 ">
+  <mat-card-content>
+
+    <form (ngSubmit)="onSubmit($event)" [formGroup]="form" class="flex flex-col">
+      <mat-form-field class="w-full">
+        <mat-label>Prompt</mat-label>
+        <textarea [formControlName]="'prompt'" matInput placeholder="Hello darkness my old friend..."></textarea>
+        @if (form.get('prompt')?.invalid) {
+          <mat-error>Required</mat-error>
+        }
+      </mat-form-field>
+      <div class="w-full flex flex-row justify-between gap-4">
+        <mat-form-field class="w-[400px]">
+          <mat-label>Model</mat-label>
+          <mat-select [formControlName]="'model'">
+            <mat-option value="llama-3-sonar-small-32k-chat">llama-3-sonar-small-32k-chat</mat-option>
+            <mat-option value="llama-3-sonar-small-32k-online">llama-3-sonar-small-32k-online</mat-option>
+            <mat-option value="llama-3-sonar-large-32k-chat">llama-3-sonar-large-32k-chat</mat-option>
+            <mat-option value="llama-3-sonar-large-32k-online">llama-3-sonar-large-32k-online</mat-option>
+            <mat-option value="llama-3-8b-instruct">llama-3-8b-instruct</mat-option>
+            <mat-option value="llama-3-70b-instruct">llama-3-70b-instruct</mat-option>
+            <mat-option value="mixtral-8x7b-instruct">mixtral-8x7b-instruct</mat-option>
+
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="w-full">
+          <mat-label>Api Key</mat-label>
+          <textarea [formControlName]="'apikey'" matInput placeholder="Api Key..."></textarea>
+          @if (form.get('apikey')?.invalid) {
+            <mat-error>Required</mat-error>
+          }
+        </mat-form-field>
+        <button extended mat-fab type="submit">
+          <mat-icon>favorite</mat-icon>
+          Send
+        </button>
+
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
